@@ -7,18 +7,18 @@ const Jimp = require('jimp').Jimp;
 const ids = (process.argv[2] && process.argv[2].split(","))
 console.log(ids)
 
-function callback(bool){
+function callback(bool) {
 
 }
 
 async function getData(id) {
   const url = "https://assetdelivery.roproxy.com/v1/asset?id=" + id;
   https.get(url, (response) => {
-    if(response.statusCode!=200){
+    if (response.statusCode != 200) {
       fs.unlink("images/" + id + ".png"); // Delete the file if an error occurs
       console.error(err);
       return false
-    }else{
+    } else {
       const file = fs.createWriteStream("images/" + id + ".png");
       response.pipe(file);
 
@@ -36,23 +36,22 @@ async function getData(id) {
 
 async function loadIds() {
   let downloadedfiles = 0;
-  if (ids){
-    ids.forEach(element => {
-       yield getData(element).then((bool)=>{
-        console.log(bool)
-        if(bool){
-          downloadedfiles+=1
-        }
-      })
-    });
+  if (ids) {
+    for (element of ids) {
+      let bool = yield getData(element)
+      console.log(bool)
+      if (bool) {
+        downloadedfiles += 1
+      }
+    }
     return downloadedfiles
   }
-  return -1
-  
+  return 0
+
 }
 
-loadIds().then((downloaded)=>{
-  console.log("Successfully Downloaded "+downloaded+" files.")
+loadIds().then((downloaded) => {
+  console.log("Successfully Downloaded " + downloaded + " files.")
 })
 
 
