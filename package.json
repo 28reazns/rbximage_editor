@@ -1,0 +1,8 @@
+{
+    "name": "my-program",
+    "version": "0.01",
+    "dependencies": {
+        "jimp": "^1.6.0"
+    }
+    
+}
