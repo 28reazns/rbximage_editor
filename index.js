@@ -5,7 +5,7 @@ const Jimp = require('jimp').Jimp;
 
 
 const ids = (process.argv[2].split(","))
-let downloaded = 0;
+
 
 async function getData(id) {
   const url = "https://assetdelivery.roproxy.com/v1/asset?id=" + id;
@@ -24,16 +24,23 @@ async function getData(id) {
   });
 }
 
-if (ids){
-  ids.forEach(element => {
-    getData(element).then((bool)=>{
-      if(bool){
-        downloaded+=1
-        if (ids.indexOf(element)==ids.length-1){
-          console.log("Successfully Downloaded "+ids.length+" files.")
+async function loadIds() {
+  let downloaded = 0;
+  if (ids){
+    ids.forEach(element => {
+      getData(element).then((bool)=>{
+        if(bool){
+          downloaded+=1
         }
-      }
-    })
-  });
+      })
+    });
+  }
+  return downloaded
 }
+
+loadIds().then((downloaded)=>{
+  console.log("Successfully Downloaded "+downloaded+" files.")
+})
+
+
 
