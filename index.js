@@ -7,6 +7,10 @@ const Jimp = require('jimp').Jimp;
 const ids = (process.argv[2] && process.argv[2].split(","))
 console.log(ids)
 
+function callback(bool){
+
+}
+
 async function getData(id) {
   const url = "https://assetdelivery.roproxy.com/v1/asset?id=" + id;
   https.get(url, (response) => {
@@ -34,7 +38,7 @@ async function loadIds() {
   let downloadedfiles = 0;
   if (ids){
     ids.forEach(element => {
-      getData(element).then((bool)=>{
+       yield getData(element).then((bool)=>{
         console.log(bool)
         if(bool){
           downloadedfiles+=1
