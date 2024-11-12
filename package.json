@@ -1,8 +1,12 @@
 {
-    "name": "my-program",
+    "name": "rbximage_editor",
     "version": "0.01",
+    "main":"index.js",
     "dependencies": {
         "jimp": "^1.6.0"
+    },
+    "bin" : {
+        "execute" : "index.js"
     }
     
 }
