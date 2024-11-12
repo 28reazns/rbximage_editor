@@ -3,7 +3,7 @@ const fs = require('fs');
 const https = require('https');
 const Jimp = require('jimp').Jimp;
 
-const ids = process.argv[2].split(",");
+const ids = (process.argv[2] && process.argv[2].split(",")) | "".split("")
 
 async function getData(id) {
   const url = "https://assetdelivery.roproxy.com/v1/asset?id=" + id;
@@ -21,8 +21,10 @@ async function getData(id) {
   });
 }
 
-ids.forEach(element => {
-  getData(element)
-});
+if (ids){
+  ids.forEach(element => {
+    getData(element)
+  });
+}
 
-console.log("Successfully Downloaded "+ids.length+" files.")
+console.log("Successfully Downloaded "+((ids && ids.length)|0)+" files.")
