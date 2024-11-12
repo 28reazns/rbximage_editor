@@ -3,7 +3,9 @@ const fs = require('fs');
 const https = require('https');
 const Jimp = require('jimp').Jimp;
 
-const ids = (process.argv[2] && process.argv[2].split(",")) | "".split("")
+
+const ids = (process.argv[2].split(","))
+let downloaded = 0;
 
 async function getData(id) {
   const url = "https://assetdelivery.roproxy.com/v1/asset?id=" + id;
@@ -13,18 +15,25 @@ async function getData(id) {
 
     file.on('finish', () => {
       file.close();
-      console.log('File downloaded successfully!');
+      return true;
     });
   }).on('error', (err) => {
     fs.unlink(filePath); // Delete the file if an error occurs
     console.error(err);
+    return false;
   });
 }
 
 if (ids){
   ids.forEach(element => {
-    getData(element)
+    getData(element).then((bool)=>{
+      if(bool){
+        downloaded+=1
+        if (ids.indexOf(element)==ids.length-1){
+          console.log("Successfully Downloaded "+ids.length+" files.")
+        }
+      }
+    })
   });
 }
 
-console.log("Successfully Downloaded "+((ids && ids.length)|0)+" files.")
