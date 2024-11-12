@@ -7,9 +7,6 @@ const Jimp = require('jimp').Jimp;
 const ids = (process.argv[2] && process.argv[2].split(","))
 console.log(ids)
 
-function callback(bool) {
-
-}
 
 function getData(id,callback) {
   const url = "https://assetdelivery.roproxy.com/v1/asset?id=" + id;
