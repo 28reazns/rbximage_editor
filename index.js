@@ -24,3 +24,5 @@ async function getData(id) {
 ids.forEach(element => {
   getData(element)
 });
+
+console.log("Successfully Downloaded "+ids.length+" files.")
