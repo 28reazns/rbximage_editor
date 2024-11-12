@@ -11,13 +11,13 @@ function callback(bool) {
 
 }
 
-async function getData(id) {
+function getData(id,callback) {
   const url = "https://assetdelivery.roproxy.com/v1/asset?id=" + id;
   https.get(url, (response) => {
     if (response.statusCode != 200) {
       fs.unlink("images/" + id + ".png"); // Delete the file if an error occurs
       console.error(err);
-      return false
+      callback(false)
     } else {
       const file = fs.createWriteStream("images/" + id + ".png");
       response.pipe(file);
@@ -25,34 +25,40 @@ async function getData(id) {
       file.on('finish', () => {
         file.close();
       });
-      return true;
+      callback(true)
     }
   }).on('error', (err) => {
     fs.unlink("images/" + id + ".png"); // Delete the file if an error occurs
     console.error(err);
-    return false;
+    callback(false)
   });
 }
 
-async function loadIds() {
+async function loadIds(callback) {
   let downloadedfiles = 0;
   if (ids) {
+    let count = 0
     for (element of ids) {
-      let bool = yield getData(element)
-      console.log(bool)
-      if (bool) {
-        downloadedfiles += 1
-      }
+
+      getData(element,bool => {
+        count+=1
+        if (bool) {
+          downloadedfiles += 1
+          if(count==ids.length){
+            callback(downloadedfiles)
+          }
+        }
+      })
+
     }
-    return downloadedfiles
+  }else{
+    callback(0)
   }
-  return 0
 
 }
 
-loadIds().then((downloaded) => {
+loadIds((downloaded) => {
   console.log("Successfully Downloaded " + downloaded + " files.")
 })
-
 
 
